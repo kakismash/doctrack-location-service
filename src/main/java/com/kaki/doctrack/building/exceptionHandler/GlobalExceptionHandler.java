@@ -68,5 +68,14 @@ public class GlobalExceptionHandler {
                 .body(errorResponse));
     }
 
+    @ExceptionHandler(SearchTermException.class)
+    public Mono<ResponseEntity<ErrorResponse>> handleJwtException(SearchTermException ex) {
+        logger.error("Handling SearchTerm exception: {}", ex.getErrorMessage());
+        ErrorResponse errorResponse = new ErrorResponse(ex.getErrorCode(), ex.getErrorMessage());
+        return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(errorResponse));
+    }
+
 }
 

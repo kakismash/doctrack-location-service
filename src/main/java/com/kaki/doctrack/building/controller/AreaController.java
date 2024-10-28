@@ -34,7 +34,7 @@ public class AreaController {
 
         logger.info("getAreas");
 
-        if ("SUPERADMIN".equals(role) || "ADMIN".equals(role)) {
+        if ("SUPER_ADMIN".equals(role) || "ADMIN".equals(role)) {
             return areaService.getAreasFlat(searchTerm, page, size, locationId)
                     .map(ResponseEntity::ok);
         } else {
@@ -52,7 +52,7 @@ public class AreaController {
 
         logger.info("getAreaByLocation");
 
-        if ("SUPERADMIN".equals(role) || "ADMIN".equals(role)) {
+        if ("SUPER_ADMIN".equals(role) || "ADMIN".equals(role)) {
             return areaService.findAreaByLocationAndId(locationId, areaId)
                     .map(ResponseEntity::ok);
         } else {
@@ -70,7 +70,7 @@ public class AreaController {
 
         logger.info("createArea");
 
-        if ("SUPERADMIN".equals(role) || "ADMIN".equals(role)) {
+        if ("SUPER_ADMIN".equals(role) || "ADMIN".equals(role)) {
             return areaService.createArea(locationId, areaDto)
                     .map(ResponseEntity::ok);
         } else {
@@ -89,7 +89,7 @@ public class AreaController {
 
         logger.info("updateArea");
 
-        if ("SUPERADMIN".equals(role) || "ADMIN".equals(role)) {
+        if ("SUPER_ADMIN".equals(role) || "ADMIN".equals(role)) {
             return areaService.updateArea(locationId, areaId, areaDto)
                     .map(ResponseEntity::ok);
         } else {
@@ -107,7 +107,7 @@ public class AreaController {
 
         logger.info("deleteArea");
 
-        if ("SUPERADMIN".equals(role) || "ADMIN".equals(role)) {
+        if ("SUPER_ADMIN".equals(role) || "ADMIN".equals(role)) {
             return areaService.deleteArea(locationId, areaId)
                     .map(ResponseEntity::ok);
         } else {

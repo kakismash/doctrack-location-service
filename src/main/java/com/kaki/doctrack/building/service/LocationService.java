@@ -2,6 +2,7 @@ package com.kaki.doctrack.building.service;
 
 import com.kaki.doctrack.building.dto.location.CreateLocationDto;
 import com.kaki.doctrack.building.dto.location.LocationDto;
+import com.kaki.doctrack.building.dto.location.LocationSimpleDto;
 import com.kaki.doctrack.building.entity.Location;
 import com.kaki.doctrack.building.exceptionHandler.LocationNotFoundException;
 import com.kaki.doctrack.building.repository.LocationRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -98,5 +100,10 @@ public class LocationService {
         return locationRepository.deleteById(id)
                 .doOnSuccess(location -> logger.info("Location deleted: {}", id))
                 .doOnError(e -> logger.error("Error deleting location", e));
+    }
+
+    public Flux<LocationSimpleDto> findAllWithSearchTerm(String searchTerm) {
+        return locationRepository.findAllByNameContainingIgnoreCase(searchTerm)
+                .map(location -> new LocationSimpleDto(location.getId(), location.getName()));
     }
 }

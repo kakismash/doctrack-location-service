@@ -2,6 +2,7 @@ package com.kaki.doctrack.building.controller;
 
 import com.kaki.doctrack.building.dto.location.CreateLocationDto;
 import com.kaki.doctrack.building.dto.location.LocationDto;
+import com.kaki.doctrack.building.dto.location.LocationSimpleDto;
 import com.kaki.doctrack.building.dto.location.UpdateLocationDto;
 import com.kaki.doctrack.building.service.LocationService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -33,7 +35,7 @@ public class LocationController {
 
         logger.info("getLocations");
 
-        if (role.equals("SUPERADMIN") || role.equals("ADMIN")) {
+        if (role.equals("SUPER_ADMIN") || role.equals("ADMIN")) {
             return locationService.findLocationBySearchTerm(searchTerm, page, size)
                     .map(ResponseEntity::ok);
         } else {
@@ -50,7 +52,7 @@ public class LocationController {
 
         logger.info("getLocationById");
 
-        if (role.equals("SUPERADMIN") || role.equals("ADMIN")) {
+        if (role.equals("SUPER_ADMIN") || role.equals("ADMIN")) {
             return locationService.findLocationById(id)
                     .map(ResponseEntity::ok);
         } else {
@@ -67,7 +69,7 @@ public class LocationController {
 
         logger.info("createLocation");
 
-        if (role.equals("SUPERADMIN") || role.equals("ADMIN")) {
+        if (role.equals("SUPER_ADMIN") || role.equals("ADMIN")) {
             return locationService.createLocation(newLocationDto)
                     .map(ResponseEntity::ok);
         } else {
@@ -85,7 +87,7 @@ public class LocationController {
 
         logger.info("updateLocation");
 
-        if (role.equals("SUPERADMIN") || role.equals("ADMIN")) {
+        if (role.equals("SUPER_ADMIN") || role.equals("ADMIN")) {
             return locationService.updateLocation(updateLocationDto.toEntity(id))
                     .map(ResponseEntity::ok);
         } else {
@@ -102,9 +104,29 @@ public class LocationController {
 
         logger.info("deleteLocation");
 
-        if (role.equals("SUPERADMIN") || role.equals("ADMIN")) {
+        if (role.equals("SUPER_ADMIN") || role.equals("ADMIN")) {
             return locationService.deleteLocation(id)
                     .map(ResponseEntity::ok);
+        } else {
+            return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+        }
+    }
+
+    @GetMapping("/all")
+    public Mono<ResponseEntity<Flux<LocationSimpleDto>>> findAllWithSearchTerm(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestHeader("X-User-Name") String username,
+            @RequestHeader("X-User-Role") String role,
+            @RequestParam(value = "search", required = false, defaultValue = "") String searchTerm) {
+
+        logger.info("findAllWithSearchTerm");
+
+        if (role.equals("SUPER_ADMIN") || role.equals("ADMIN")) {
+            return Mono.just(
+                    ResponseEntity.ok(
+                            locationService.findAllWithSearchTerm(searchTerm)
+                    )
+            );
         } else {
             return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
         }

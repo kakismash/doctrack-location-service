@@ -1,14 +1,12 @@
 package com.kaki.doctrack.building.repository;
 
 import com.kaki.doctrack.building.entity.Location;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveSortingRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Repository
 public interface LocationRepository extends R2dbcRepository<Location, Long>, ReactiveSortingRepository<Location, Long> {
@@ -29,4 +27,5 @@ public interface LocationRepository extends R2dbcRepository<Location, Long>, Rea
           @Param("limit") int limit,
           @Param("offset") int offset);
 
+    Flux<Location> findAllByNameContainingIgnoreCase(String name);
 }
