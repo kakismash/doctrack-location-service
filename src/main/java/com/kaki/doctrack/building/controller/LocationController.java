@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/locations")
 @RequiredArgsConstructor
@@ -130,6 +134,25 @@ public class LocationController {
         } else {
             return Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
         }
+    }
+
+    @GetMapping("/internal/batch")
+    public Mono<ResponseEntity<Flux<LocationDto>>> getLocationsByIds(
+            @RequestParam("ids") String ids) {
+
+        logger.info("getLocationsByIds");
+
+        // Parse the comma-separated IDs and convert them into a Flux<Long>
+        List<Long> idList = Arrays.stream(ids.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        Flux<Long> locationIds = Flux.fromIterable(idList);
+
+        return Mono.just(
+                ResponseEntity.ok(
+                        locationService.findLocationsByIds(locationIds)
+                )
+        );
     }
 
 }

@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.kaki.doctrack</groupId>
-	<artifactId>location</artifactId>
+	<artifactId>location-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>location-service</name>
 	<description>location-service</description>

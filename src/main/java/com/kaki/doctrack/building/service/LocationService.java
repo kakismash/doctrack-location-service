@@ -106,4 +106,9 @@ public class LocationService {
         return locationRepository.findAllByNameContainingIgnoreCase(searchTerm)
                 .map(location -> new LocationSimpleDto(location.getId(), location.getName()));
     }
+
+    public Flux<LocationDto> findLocationsByIds(Flux<Long> locationIds) {
+        return locationRepository.findAllById(locationIds)
+                .map(LocationDto::fromEntity);
+    }
 }
