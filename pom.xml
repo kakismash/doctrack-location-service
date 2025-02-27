@@ -131,7 +131,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<compilerArgs>
-						<arg>--enable-preview</arg>
+						--enable-preview
 						<arg>-parameters</arg>
 					</compilerArgs>
 				</configuration>
